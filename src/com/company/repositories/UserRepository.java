@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository implements IUserRepository {
-    private final IDB db;  // Dependency Injection
+    private final IDB db;
 
     public UserRepository(IDB db) {
         this.db = db;
@@ -17,77 +17,78 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public boolean createUser(User user) {
-        Connection con = null;
+        // Добавляем created_at и is_active в список колонок
+        String sql = "INSERT INTO users(username, email, phone, password, first_name, last_name, created_at, is_active) " +
+                "VALUES (?, ?, ?, ?, ?, ?, NOW(), true)";
 
-        try {
-            con = db.getConnection();
-            String sql = "INSERT INTO users(name,surname,gender) VALUES (?,?,?)";
-            PreparedStatement st = con.prepareStatement(sql);
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
 
-            st.setString(1, user.getName());
-            st.setString(2, user.getSurname());
-            st.setBoolean(3, user.getGender());
+            st.setString(1, user.getUsername());
+            st.setString(2, user.getEmail());
+            st.setString(3, user.getPhone());
+            st.setString(4, user.getPassword());
+            st.setString(5, user.getFirstName());
+            st.setString(6, user.getLastName());
 
-            st.execute();
+            // Мы заполнили 6 знаков вопроса. NOW() и true база подставит сама.
 
+            st.executeUpdate();
             return true;
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
         }
-
         return false;
     }
 
     @Override
-    public User getUser(int id) {
-        Connection con = null;
+    public int logIn(String un, String pw) {
+        // ВАЖНО: Судя по твоему прошлому коду, поле в базе может называться password или password_hash.
+        // Я использую "password", как в твоем скриншоте ER-диаграммы.
+        String sql = "SELECT id FROM users WHERE username = ? AND password = ?";
 
-        try {
-            con = db.getConnection();
-            String sql = "SELECT id,name,surname,gender FROM users WHERE id=?";
-            PreparedStatement st = con.prepareStatement(sql);
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
 
-            st.setInt(1, id);
+            st.setString(1, un);
+            st.setString(2, pw);
 
             ResultSet rs = st.executeQuery();
+
             if (rs.next()) {
-                return new User(rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("surname"),
-                        rs.getBoolean("gender"));
+                return rs.getInt("id"); // Возвращаем реальный ID из базы
             }
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
         }
-
-        return null;
+        return -1; // Если юзер не найден или произошла ошибка
     }
 
     @Override
     public List<User> getAllUsers() {
-        Connection con = null;
+        String sql = "SELECT id, username, email, phone, password, first_name, last_name FROM users";
+        List<User> users = new ArrayList<>();
 
-        try {
-            con = db.getConnection();
-            String sql = "SELECT id,name,surname,gender FROM users";
-            Statement st = con.createStatement();
+        try (Connection con = db.getConnection();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
-            ResultSet rs = st.executeQuery(sql);
-            List<User> users = new ArrayList<>();
             while (rs.next()) {
-                User user = new User(rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("surname"),
-                        rs.getBoolean("gender"));
-
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("password"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name")
+                );
                 users.add(user);
             }
-
             return users;
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
         }
-
         return null;
     }
 }

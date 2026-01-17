@@ -13,19 +13,18 @@ public class UserController implements IUserController {
         this.repo = repo;
     }
 
-    public String createUser(String name, String surname, String gender) {
-        boolean male = gender.equalsIgnoreCase("male");
-        User user = new User(name, surname, male);
+    @Override
+    public boolean createUser(String username, String email, String phone, String password, String first_name, String last_name) {
+        User user = new User(username, email, phone, password, first_name, last_name);
 
         boolean created = repo.createUser(user);
 
-        return (created ? "User was created!" : "User creation was failed!");
+        return (created);
     }
 
-    public String getUser(int id) {
-        User user = repo.getUser(id);
-
-        return (user == null ? "User was not found!" : user.toString());
+    public int logIn(String un, String pw) {
+        int result = repo.logIn(un, pw);
+        return (result);
     }
 
     public String getAllUsers() {
