@@ -12,5 +12,5 @@ public interface IPropertyRepository {
     boolean createListing(int propertyId, double price, int currencyId);
     List<Property> getMyProperties(int ownerId);
     String getAllListings();
-    // Впадлу добавлять еще
+    // Впадлу добавлять ещеу
 }
