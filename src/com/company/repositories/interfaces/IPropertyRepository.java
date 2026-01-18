@@ -12,5 +12,5 @@ public interface IPropertyRepository {
     boolean createListing(int propertyId, double price, int currencyId);
     List<Property> getMyProperties(int ownerId);
     String getAllListings();
-    // Здесь можно будет добавить методы: getPropertyById, getAllProperties и т.д.
+    // Впадлу добавлять еще
 }

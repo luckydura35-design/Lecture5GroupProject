@@ -4,7 +4,7 @@ import com.company.controllers.interfaces.IPropertyController;
 import com.company.models.Property;
 import com.company.repositories.interfaces.IPropertyRepository;
 import java.util.List;
-import java.util.ArrayList;
+
 
 public class PropertyController implements IPropertyController {
     private final IPropertyRepository repo;

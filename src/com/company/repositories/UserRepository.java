@@ -17,7 +17,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public boolean createUser(User user) {
-        // Добавляем created_at и is_active в список колонок
+        // я хз поч это так работает
         String sql = "INSERT INTO users(username, email, phone, password, first_name, last_name, created_at, is_active) " +
                 "VALUES (?, ?, ?, ?, ?, ?, NOW(), true)";
 
@@ -31,7 +31,7 @@ public class UserRepository implements IUserRepository {
             st.setString(5, user.getFirstName());
             st.setString(6, user.getLastName());
 
-            // Мы заполнили 6 знаков вопроса. NOW() и true база подставит сама.
+            // NOW() сам заполняет время в дбшке
 
             st.executeUpdate();
             return true;
@@ -43,8 +43,6 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public int logIn(String un, String pw) {
-        // ВАЖНО: Судя по твоему прошлому коду, поле в базе может называться password или password_hash.
-        // Я использую "password", как в твоем скриншоте ER-диаграммы.
         String sql = "SELECT id FROM users WHERE username = ? AND password = ?";
 
         try (Connection con = db.getConnection();
@@ -56,12 +54,12 @@ public class UserRepository implements IUserRepository {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt("id"); // Возвращаем реальный ID из базы
+                return rs.getInt("id"); // ВОЗВРОЩАЕМ id
             }
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
         }
-        return -1; // Если юзер не найден или произошла ошибка
+        return -1; //если не нашли
     }
 
     @Override

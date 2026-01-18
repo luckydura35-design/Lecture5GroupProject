@@ -13,7 +13,7 @@ public class MyApplication {
     private final IUserController userController;
     private final IPropertyController propertyController;
     private int currentUserId = -1;
-    private boolean is_user_logged_in = false; // Убрал static, это поле объекта
+    private boolean is_user_logged_in = false; // статик не ставте (не работает)
 
     public MyApplication(IUserController userController, IPropertyController propertyController) {
         this.userController = userController;
@@ -85,7 +85,6 @@ public class MyApplication {
         System.out.print("First Name: "); String first_name = scanner.next();
         System.out.print("Last Name: "); String last_name = scanner.next();
 
-        // Исправлено: проверяем response (результат создания), а не флаг входа
         boolean response = userController.createUser(username, email, phone, password, first_name, last_name);
 
         if (response) {
@@ -114,8 +113,6 @@ public class MyApplication {
         System.out.println("\n--- Add New Property ---");
 
         try {
-            // В идеале currentUserId должен браться из системы после логина.
-            // Если пока не переделал логин, можно временно спросить ID или поставить 1.
 
             System.out.print("Enter Property Type ID (e.g., 1 for House, 2 for Flat): ");
             int typeId = scanner.nextInt();

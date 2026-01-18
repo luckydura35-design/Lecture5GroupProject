@@ -9,11 +9,9 @@ public class User {
     private String first_name;
     private String last_name;
 
-    // Пустой конструктор
     public User() {
     }
 
-    // Конструктор без ID (удобно для создания нового юзера перед вставкой в базу)
     public User(String username, String email, String phone, String password, String first_name, String last_name) {
         this.username = username;
         this.email = email;
@@ -34,7 +32,7 @@ public class User {
         this.last_name = last_name;
     }
 
-    // Геттеры и Сеттеры
+    // геттеры и Сеттеры
     public int getId() {
         return id;
     }

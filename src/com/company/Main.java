@@ -14,25 +14,24 @@ import com.company.repositories.interfaces.IUserRepository;
 public class Main {
 
     public static void main(String[] args) {
-        // 1. Инициализация базы данных
+        // 1) Инициализируем базу (это база)
         IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "0608", "OOPdb");
 
-        // 2. Инициализация слоев для Пользователей (User)
+        // 2) Инициализация репозитория и контроллера для user класса
         IUserRepository userRepo = new UserRepository(db);
         IUserController userController = new UserController(userRepo);
 
-        // 3. Инициализация слоев для Недвижимости (Property)
+        // 3) Инициализация репозитория и контроллера для property класса
         IPropertyRepository propertyRepo = new PropertyRepository(db);
         IPropertyController propertyController = new PropertyController(propertyRepo);
 
-        // 4. Передаем оба контроллера в приложение2
-        // (Убедись, что ты обновил конструктор в классе MyApplication, как мы обсуждали ранее)
+        // 4) передаем все в аппликейшн
         MyApplication app = new MyApplication(userController, propertyController);
 
-        // 5. Запуск
+        // 5) запуск
         app.start();
 
-        // 6. Закрытие соединения
+        // 6) закрытие соединения
         db.close();
     }
 }

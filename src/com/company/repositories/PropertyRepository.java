@@ -17,7 +17,7 @@ public class PropertyRepository implements IPropertyRepository {
 
     @Override
     public boolean createProperty(Property property) {
-        // SQL запрос согласно вашей схеме БД
+        // Тут Ску Л запрос, вопросики снизу заполняються через гетеры
         String sql = "INSERT INTO properties(owner_id, type_id, address_id, area_sqm, rooms_count, floor, description, created_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
 
@@ -109,7 +109,7 @@ public class PropertyRepository implements IPropertyRepository {
 
     @Override
     public String getAllListings() {
-        // Делаем JOIN, чтобы видеть адрес и описание вместе с ценой
+        // Джоинт чтобы адрес был с куренси
         String sql = "SELECT l.id, p.description, l.price, c.code, p.area_sqm " +
                 "FROM listings l " +
                 "JOIN properties p ON l.property_id = p.id " +

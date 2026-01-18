@@ -10,7 +10,6 @@ public class Property {
     private int floor;
     private String description;
 
-    // Конструктор для создания новой недвижимости (без id)
     public Property(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description) {
         this.ownerId = ownerId;
         this.typeId = typeId;
