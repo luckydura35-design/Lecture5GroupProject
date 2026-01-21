@@ -7,4 +7,4 @@ public interface IPropertyController {
     String createListing(int propertyId, double price, int currencyId);
     String getMyProperties(int ownerId);
     String getAllListings();
-}
+}//тест
