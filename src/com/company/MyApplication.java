@@ -143,7 +143,8 @@ public class MyApplication {
 
         try {
 
-            System.out.print("Enter Property Type ID (1\t\"Kazakhstan\"\n" +
+            System.out.print("Enter Property Type ID \n" +
+                    "(1\t\"Kazakhstan\"\n" +
                     "2\t\"USA\"\n" +
                     "3\t\"United Kingdom\"): ");
             int typeId = scanner.nextInt();
