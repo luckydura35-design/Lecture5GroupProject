@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         // 1) Инициализируем базу (это база)
-        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "0608", "OOPdb");
+        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "546907", "OOP project");
 
         // 2) Инициализация репозитория и контроллера для user класса
         IUserRepository userRepo = new UserRepository(db);
