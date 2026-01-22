@@ -87,15 +87,21 @@ public class MyApplication {
         while (true) {
             System.out.print("Email: ");
             email = scanner.next();
-            if (Pattern.matches("^[A-Za-z0-9+_.-]+@(.+)$", email)) break;
-            System.out.println("Error: Invalid email format (example@mail.com).");
-        }// мен осы жерде қалай жұмыс істейтінін түсінемін
+            if (email.contains("@") && email.contains(".")) break;
+            System.out.println("Error: Email must contain @ and dot.");
+        }
+
+
         String phone;
         while (true) {
-            System.out.print("Phone (e.g. +77715161186): ");
+            System.out.print("Phone: ");
             phone = scanner.next();
-            if (Pattern.matches("^\\+?[0-9]{10,12}$", phone)) break;
-            System.out.println("Error: Invalid phone number. Use digits and optional '+' prefix.");
+            boolean isAllDigits = phone.replace("+", "").chars().allMatch(Character::isDigit);
+            int len = phone.length();
+
+            if (isAllDigits && len >= 10 && len <= 13) break;
+
+            System.out.println("Error: Invalid phone (10-12 digits required).");
         }
         String password;
         while (true) {
