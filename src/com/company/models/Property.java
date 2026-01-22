@@ -32,13 +32,13 @@ public class Property {
     @Override
     public String toString() {
         return "Property{" +
-                "id=" + id +
-                ", typeId=" + typeId +
-                ", addressId=" + addressId +
-                ", area=" + areaSqm + " sqm" +
-                ", rooms=" + roomsCount +
-                ", floor=" + floor +
-                ", desc='" + description + '\'' +
+                "id =" + id +
+                ", typeId =" + typeId +
+                ", addressId =" + addressId +
+                ", area =" + areaSqm + " sqm" +
+                ", rooms =" + roomsCount +
+                ", floor =" + floor +
+                ", desc ='" + description + '\'' +
                 '}';
     }
 }

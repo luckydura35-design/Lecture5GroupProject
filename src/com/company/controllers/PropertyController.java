@@ -24,7 +24,7 @@ public class PropertyController implements IPropertyController {
     @Override
     public String getAllProperties() {
         List<Property> properties = repo.getAllProperties();
-        if (properties == null) return "Error happened!";
+        if (properties == null) return "Error happened";
 
         StringBuilder sb = new StringBuilder();
         for (Property p : properties) {
