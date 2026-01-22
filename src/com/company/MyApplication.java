@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.controllers.interfaces.IUserController;
 import com.company.controllers.interfaces.IPropertyController;
+import java.util.regex.Pattern;
 import com.company.models.User; // Не забудь импорт, если будешь его использовать
 
 import java.util.InputMismatchException;
@@ -77,20 +78,48 @@ public class MyApplication {
     }
 
     public void register() {
-        System.out.println("Fill in the data:");
-        System.out.print("Username: "); String username = scanner.next();
-        System.out.print("Email: "); String email = scanner.next();
-        System.out.print("Phone: "); String phone = scanner.next();
-        System.out.print("Password: "); String password = scanner.next();
-        System.out.print("First Name: "); String first_name = scanner.next();
-        System.out.print("Last Name: "); String last_name = scanner.next();
+        System.out.println("--- Registration Form ---");
+        String username;
+        System.out.print("Username: ");
+        username = scanner.next();
 
-        boolean response = userController.createUser(username, email, phone, password, first_name, last_name);
+        String email;
+        while (true) {
+            System.out.print("Email: ");
+            email = scanner.next();
+            if (Pattern.matches("^[A-Za-z0-9+_.-]+@(.+)$", email)) break;
+            System.out.println("Error: Invalid email format (example@mail.com).");
+        }// мен осы жерде қалай жұмыс істейтінін түсінемін
+        String phone;
+        while (true) {
+            System.out.print("Phone (e.g. +77715161186): ");
+            phone = scanner.next();
+            if (Pattern.matches("^\\+?[0-9]{10,12}$", phone)) break;
+            System.out.println("Error: Invalid phone number. Use digits and optional '+' prefix.");
+        }
+        String password;
+        while (true) {
+            System.out.print("Password: ");
+            password = scanner.next();
+            if (password.length() >= 6) break;
+            System.out.println("Error: Password must be at least 6 characters long.");
+        }
+        System.out.print("First Name: ");
+        String first_name = scanner.next();
+        System.out.print("Last Name: ");
+        String last_name = scanner.next();
 
-        if (response) {
-            System.out.println("Account has been created! 😊 Now you can log in.");
-        } else {
-            System.out.println("Something went wrong during registration! 😥");
+        try {
+            boolean response = userController.createUser(username, email, phone, password, first_name, last_name);
+
+            if (response) {
+                System.out.println("✅ Account has been created! Now you can log in.");
+            } else {
+                System.out.println("❌ Something went wrong during registration (database error).");
+            }
+        } catch (Exception e) {
+            // Ловим возможный NullPointerException, если база не подключена
+            System.out.println("❌ Fatal Error: Database connection is not established.");
         }
     }
 
@@ -114,7 +143,10 @@ public class MyApplication {
 
         try {
 
-            System.out.print("Enter Property Type ID (e.g., 1 for House, 2 for Flat): ");
+            System.out.print("Enter Property Type ID \n" +
+                    "(1\t\"Kazakhstan\"\n" +
+                    "2\t\"USA\"\n" +
+                    "3\t\"United Kingdom\"): ");
             int typeId = scanner.nextInt();
 
             System.out.print("Enter Address ID: ");
