@@ -1,7 +1,7 @@
 package com.company.controllers.interfaces;
 
 public interface IPropertyController {
-    String createProperty(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description);
+    String createProperty(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description, String title);
     String getAllProperties();
     String createPropertyType(String name);
     String createListing(int propertyId, double price, int currencyId);

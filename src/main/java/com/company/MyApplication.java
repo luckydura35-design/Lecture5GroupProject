@@ -200,9 +200,13 @@ public class MyApplication {
             System.out.print("Enter Description: ");
             String description = scanner.nextLine();
 
+            scanner.nextLine();
+            System.out.print("Enter Title: ");
+            String title = scanner.nextLine();
+
             // Вызываем контроллер
             String response = propertyController.createProperty(
-                    currentUserId, typeId, addressId, area, rooms, floor, description
+                    currentUserId, typeId, addressId, area, rooms, floor, description, title
             );
 
             System.out.println(response);
@@ -289,7 +293,10 @@ public class MyApplication {
     }
 
     private boolean banUser(){
-        return true;
+        System.out.print("Enter User ID to update: ");
+        int targetUserId = scanner.nextInt();
+
+        return userController.banUser(targetUserId);
     }
     private void findUser(){
         System.out.println("\n--- Find user menu ---");
@@ -317,6 +324,8 @@ public class MyApplication {
         targetValue = scanner.nextLine();
 
         User user = userController.findUser(columnName, targetValue);
+
+        System.out.println(user);
 
     }
 }

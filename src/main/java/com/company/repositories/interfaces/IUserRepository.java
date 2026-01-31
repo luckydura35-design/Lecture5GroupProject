@@ -10,4 +10,5 @@ public interface IUserRepository {
     List<User> getAllUsers();
     boolean updateUserField(int id, String column, String newValue);
     User findUser(String columnName, String targetValue);
+    boolean banUser(int targetUserId);
 }

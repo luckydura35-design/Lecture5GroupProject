@@ -133,4 +133,52 @@ public class UserRepository implements IUserRepository {
         return null;
 
     }
+    public boolean banUser(int targetUserId) {
+        String deleteListingsSQL = "DELETE FROM listings WHERE property_id IN (SELECT id FROM properties WHERE owner_id = ?)";
+        String deletePropertiesSQL = "DELETE FROM properties WHERE owner_id = ?";
+        String deleteUserSQL = "UPDATE users SET is_active = false WHERE id = ?";
+
+        // Используем try-with-resources для автоматического закрытия соединения
+        try (Connection con = db.getConnection()) {
+            con.setAutoCommit(false); // Начинаем транзакцию
+
+            try {
+                // 1. Удаляем листинги
+                try (PreparedStatement psListings = con.prepareStatement(deleteListingsSQL)) {
+                    psListings.setInt(1, targetUserId);
+                    psListings.executeUpdate();
+                }
+
+                // 2. Удаляем объекты недвижимости
+                try (PreparedStatement psProps = con.prepareStatement(deletePropertiesSQL)) {
+                    psProps.setInt(1, targetUserId);
+                    psProps.executeUpdate();
+                }
+
+                // 3. Баним самого пользователя
+                try (PreparedStatement psUser = con.prepareStatement(deleteUserSQL)) {
+                    psUser.setInt(1, targetUserId);
+                    int rowsUpdated = psUser.executeUpdate();
+
+                    if (rowsUpdated == 0) {
+                        con.rollback(); // Если юзера нет, откатываем удаления листингов/проперти
+                        return false;
+                    }
+                }
+
+                // !!! САМЫЙ ВАЖНЫЙ ШАГ !!!
+                con.commit();
+                return true;
+
+            } catch (SQLException e) {
+                con.rollback(); // Если случилась ошибка на любом этапе — отменяем всё
+                System.out.println("Transaction error, rolling back: " + e.getMessage());
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Connection error: " + e.getMessage());
+            return false;
+        }
+    }
 }

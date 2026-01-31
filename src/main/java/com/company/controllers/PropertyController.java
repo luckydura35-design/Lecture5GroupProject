@@ -14,8 +14,8 @@ public class PropertyController implements IPropertyController {
     }
 
     @Override
-    public String createProperty(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description) {
-        Property property = new Property(ownerId, typeId, addressId, areaSqm, roomsCount, floor, description);
+    public String createProperty(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description, String title) {
+        Property property = new Property(ownerId, typeId, addressId, areaSqm, roomsCount, floor, description, title);
 
         boolean created = repo.createProperty(property);
 

@@ -19,7 +19,7 @@ public class Main {
         db.setHost("jdbc:postgresql://localhost:5432");
         db.setDbName("OOPdb");
         db.setUsername("postgres");
-        db.setPassword("070809Aa");
+        db.setPassword("0608");
 
         // 2) Инициализация репозитория и контроллера для user класса
         IUserRepository userRepo = new UserRepository(db);

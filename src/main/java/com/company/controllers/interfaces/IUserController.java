@@ -8,4 +8,5 @@ public interface IUserController {
     String getAllUsers();
     boolean updateUserField(int id, String column, String newValue);
     User findUser(String columnName, String targetName);
+    boolean banUser(int targetUserId);
 }

@@ -9,8 +9,9 @@ public class Property {
     private int roomsCount;
     private int floor;
     private String description;
+    private String title;
 
-    public Property(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description) {
+    public Property(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description, String title) {
         this.ownerId = ownerId;
         this.typeId = typeId;
         this.addressId = addressId;
@@ -18,6 +19,19 @@ public class Property {
         this.roomsCount = roomsCount;
         this.floor = floor;
         this.description = description;
+        this.title = title;
+    }
+
+    public Property(int id,int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description, String title) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.typeId = typeId;
+        this.addressId = addressId;
+        this.areaSqm = areaSqm;
+        this.roomsCount = roomsCount;
+        this.floor = floor;
+        this.description = description;
+        this.title = title;
     }
 
     // Геттеры
@@ -28,6 +42,7 @@ public class Property {
     public int getRoomsCount() { return roomsCount; }
     public int getFloor() { return floor; }
     public String getDescription() { return description; }
+    public String getTitle() { return title; }
 
     @Override
     public String toString() {
@@ -38,7 +53,8 @@ public class Property {
                 ", area=" + areaSqm + " sqm" +
                 ", rooms=" + roomsCount +
                 ", floor=" + floor +
-                ", desc='" + description + '\'' +
+                ", desc='" + description +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

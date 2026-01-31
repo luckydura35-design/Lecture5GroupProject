@@ -18,8 +18,8 @@ public class PropertyRepository implements IPropertyRepository {
     @Override
     public boolean createProperty(Property property) {
         // Тут Ску Л запрос, вопросики снизу заполняються через гетеры
-        String sql = "INSERT INTO properties(owner_id, type_id, address_id, area_sqm, rooms_count, floor, description, created_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+        String sql = "INSERT INTO properties(owner_id, type_id, address_id, area_sqm, rooms_count, floor, description, title ,created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
@@ -31,6 +31,7 @@ public class PropertyRepository implements IPropertyRepository {
             st.setInt(5, property.getRoomsCount());
             st.setInt(6, property.getFloor());
             st.setString(7, property.getDescription());
+            st.setString(8, property.getTitle());
 
             st.executeUpdate();
             return true;
@@ -42,14 +43,15 @@ public class PropertyRepository implements IPropertyRepository {
 
     @Override
     public List<Property> getAllProperties() {
-        String sql = "SELECT id, owner_id, type_id, address_id, area_sqm, rooms_count, floor, description FROM properties";
+        String sql = "SELECT id, owner_id, type_id, address_id, area_sqm, rooms_count, floor, description, title FROM properties";
         List<Property> list = new ArrayList<>();
         try (Connection con = db.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Property p = new Property(
                         rs.getInt("owner_id"), rs.getInt("type_id"),
                         rs.getInt("address_id"), rs.getDouble("area_sqm"),
-                        rs.getInt("rooms_count"), rs.getInt("floor"), rs.getString("description")
+                        rs.getInt("rooms_count"), rs.getInt("floor"), rs.getString("description"),
+                        rs.getString("title")
                 );
                 list.add(p);
             }
@@ -98,9 +100,11 @@ public class PropertyRepository implements IPropertyRepository {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 list.add(new Property(
+                        rs.getInt("id"),
                         rs.getInt("owner_id"), rs.getInt("type_id"),
                         rs.getInt("address_id"), rs.getDouble("area_sqm"),
-                        rs.getInt("rooms_count"), rs.getInt("floor"), rs.getString("description")
+                        rs.getInt("rooms_count"), rs.getInt("floor"), rs.getString("description"),
+                        rs.getString("title")
                 ));
             }
         } catch (SQLException e) { System.out.println("SQL error: " + e.getMessage()); }
@@ -109,21 +113,33 @@ public class PropertyRepository implements IPropertyRepository {
 
     @Override
     public String getAllListings() {
-        // Джоинт чтобы адрес был с куренси
-        String sql = "SELECT l.id, p.description, l.price, c.code, p.area_sqm " +
+        // Добавляем JOIN users и выбираем u.username
+        String sql = "SELECT l.id, p.title ,p.description, l.price, c.code, p.area_sqm, u.username " +
                 "FROM listings l " +
                 "JOIN properties p ON l.property_id = p.id " +
                 "JOIN currencies c ON l.currency_id = c.id " +
+                "JOIN users u ON p.owner_id = u.id " + // Присоединяем таблицу пользователей
                 "WHERE l.status = 'active'";
+
         StringBuilder sb = new StringBuilder();
-        try (Connection con = db.getConnection(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        try (Connection con = db.getConnection();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
             while (rs.next()) {
-                sb.append(String.format("ID: %d | %s | Price: %.2f %s | Area: %.1f sqm\n",
-                        rs.getInt("id"), rs.getString("description"),
-                        rs.getDouble("price"), rs.getString("code"), rs.getDouble("area_sqm")));
+                // Добавляем %s для юзернейма в формат строки
+                sb.append(String.format("ID: %d | Seller: %s | title: %s | %s | Price: %.2f %s | Area: %.1f sqm\n",
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("title"),// Достаем никнейм
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        rs.getString("code"),
+                        rs.getDouble("area_sqm")));
             }
-        } catch (SQLException e) { return "Error: " + e.getMessage(); }
+        } catch (SQLException e) {
+            return "Error: " + e.getMessage();
+        }
         return sb.toString().isEmpty() ? "Market is empty." : sb.toString();
     }
-
 }

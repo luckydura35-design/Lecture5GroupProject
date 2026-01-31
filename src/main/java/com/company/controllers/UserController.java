@@ -44,4 +44,6 @@ public class UserController implements IUserController {
     public User findUser(String columnName, String targetValue){
         return repo.findUser(columnName, targetValue);
     }
+
+    public boolean banUser(int targetUserId){return repo.banUser(targetUserId);}
 }
