@@ -12,6 +12,7 @@ public class MyApplication {
     private final IPropertyController propertyController;
     private int currentUserId = -1;
     private boolean is_user_logged_in = false; // статик не ставте (не работает)
+    private boolean is_user_admin = false;
 
     public MyApplication(IUserController userController, IPropertyController propertyController) {
         this.userController = userController;
@@ -32,8 +33,18 @@ public class MyApplication {
         System.out.println("2. [Market] Post my property for sale (Add an option)");
         System.out.println("3. [My] Add a new property to my collection");
         System.out.println("4. [My] Show my properties");
-        System.out.println("5. [Admin] Show all users");
-        System.out.println("6. Log Out");
+        System.out.println("5. Log Out");
+        System.out.println("0. Exit");
+        System.out.print("Enter option: ");
+    }
+
+    private void adminMenu() {
+        System.out.println("\n--- ADMIN MENU (You`re AN ADMIN!)");
+        System.out.println("1. [Admin] Show all users");
+        System.out.println("2. [Admin] Change user data");
+        System.out.println("3. [Admin] ban user");
+        System.out.println("4. [Admin] find user");
+        System.out.println("5. Log Out");
         System.out.println("0. Exit");
         System.out.print("Enter option: ");
     }
@@ -44,31 +55,49 @@ public class MyApplication {
                 authMenu();
                 try {
                     int option = scanner.nextInt();
-                    if (option == 1) register();
-                    else if (option == 2) logIn();
-                    else if (option == 0) break;
-                    else System.out.println("Invalid option!");
+                    switch (option) {
+                        case 1: register(); break;
+                        case 2: logIn(); break;
+                        case 0: break;
+                    }
                 } catch (InputMismatchException e) {
                     System.out.println("Input must be integer!");
                     scanner.nextLine();
                 }
             } else {
-                mainMenu();
-                try {
-                    int option = scanner.nextInt();
-                    switch (option) {
-                        case 1: showMarket(); break;
-                        case 2: postListing(); break;
-                        case 3: addProperty(); break;
-                        case 4: showMyProperties(); break;
-                        case 5: showAllUsers(); break;
-                        case 6: is_user_logged_in = false; currentUserId = -1; break;
-                        case 0: return;
-                        default: System.out.println("Invalid option!"); break;
+                if(is_user_admin) {
+                    adminMenu();
+                    try {
+                        int option = scanner.nextInt();
+                        switch (option) {
+                            case 1: showAllUsers(); break;
+                            case 2: updateUserData(); break;
+                            case 3: banUser(); break;
+                            case 0: return;
+                            default: System.out.println("Invalid option!"); break;
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Input must be integer!");
+                        scanner.nextLine();
                     }
-                } catch (InputMismatchException e) {
-                    System.out.println("Input must be integer!");
-                    scanner.nextLine();
+                }
+                else {
+                    mainMenu();
+                    try {
+                        int option = scanner.nextInt();
+                        switch (option) {
+                            case 1: showMarket(); break;
+                            case 2: postListing(); break;
+                            case 3: addProperty(); break;
+                            case 4: showMyProperties(); break;
+                            case 5: is_user_logged_in = false; currentUserId = -1; break;
+                            case 0: return;
+                            default: System.out.println("Invalid option!"); break;
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Input must be integer!");
+                        scanner.nextLine();
+                    }
                 }
             }
         }
@@ -131,12 +160,13 @@ public class MyApplication {
         System.out.print("Username: "); String username = scanner.next();
         System.out.print("Password: "); String password = scanner.next();
 
-        int response = userController.logIn(username, password);
+        int user_id = userController.logIn(username, password);
 
-        if (response > -1) {
+        if (user_id > -1) {
             System.out.println("You logged in! 👌");
             is_user_logged_in = true;
-            currentUserId = response;
+            currentUserId = user_id;
+            if (currentUserId == 777) {is_user_admin = true;}
         } else {
             System.out.println("Invalid username or password! 😥");
         }
@@ -210,5 +240,53 @@ public class MyApplication {
     private void showMyProperties() {
         System.out.println("\n--- Your Properties ---");
         System.out.println(propertyController.getMyProperties(currentUserId));
+    }
+
+    private void updateUserData() {
+        System.out.print("Enter User ID to modify: ");
+        int targetUserId = scanner.nextInt();
+
+        // TODO: Сделать проверку по айди, есть ли такой пользователь вообще
+
+        System.out.println("\n--- What do you want to change? ---");
+        System.out.println("1. Username");
+        System.out.println("2. Email");
+        System.out.println("3. Phone");
+        System.out.println("4. Password");
+        System.out.println("0. Back");
+        System.out.print("Select: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Очистка буфера после nextInt()
+
+        String columnName = "";
+        String newValue = "";
+
+        switch (choice) {
+            case 1: columnName = "username";break;
+            case 2: columnName = "email"; break;
+            case 3: columnName = "phone"; break;
+            case 4: columnName = "password"; break;
+            case 0: return;
+            default:
+                System.out.println("Invalid choice!");
+                return;
+        }
+
+        System.out.print("Enter new value for " + columnName + ": ");
+        newValue = scanner.nextLine();
+
+        // Отправляем в контроллер
+        boolean success = userController.updateUserField(targetUserId, columnName, newValue);
+
+        if (success) {
+            System.out.println("✅ User updated successfully!");
+        } else {
+            System.out.println("❌ Failed to update user.");
+        }
+    }
+
+    private boolean banUser(){
+        return true;
     }
 }

@@ -37,4 +37,7 @@ public class UserController implements IUserController {
 
         return response.toString();
     }
+    public boolean updateUserField(int userId, String columnName, String newValue){
+        return repo.updateUserField(userId, columnName, newValue);
+    }
 }

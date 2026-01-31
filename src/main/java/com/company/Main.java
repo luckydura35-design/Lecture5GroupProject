@@ -17,9 +17,9 @@ public class Main {
         // 1.1) Вставляем в атрибуты данные через сеттеры из-за синглтона крч
         PostgresDB db = PostgresDB.getInstance();
         db.setHost("jdbc:postgresql://localhost:5432");
-        db.setDbName("OOP project");
+        db.setDbName("OOPdb");
         db.setUsername("postgres");
-        db.setPassword("546907");
+        db.setPassword("070809Aa");
 
         // 2) Инициализация репозитория и контроллера для user класса
         IUserRepository userRepo = new UserRepository(db);

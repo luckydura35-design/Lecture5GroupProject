@@ -8,4 +8,5 @@ public interface IUserRepository {
     boolean createUser(User user);
     int logIn(String un, String pw);
     List<User> getAllUsers();
+    boolean updateUserField(int id, String column, String newValue);
 }

@@ -89,4 +89,22 @@ public class UserRepository implements IUserRepository {
         }
         return null;
     }
+
+    @Override
+    public boolean updateUserField(int userId, String columnName, String newValue){
+        String sql = "UPDATE users SET " + columnName + " = ? WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)){
+
+                st.setString(1, newValue);
+                st.setInt(2, userId);
+
+                int rowsUpdated = st.executeUpdate();
+                return rowsUpdated > 0;
+        }catch (SQLException e){
+            System.out.println("SQL Error: " + e.getMessage());
+            return false;
+        }
+
+    }
 }
