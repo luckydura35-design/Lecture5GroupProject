@@ -1,3 +1,4 @@
+
 package com.company.data;
 
 import com.company.data.interfaces.IDB;
@@ -5,6 +6,9 @@ import com.company.data.interfaces.IDB;
 import java.sql.*;
 
 public class PostgresDB implements IDB {
+
+    private static PostgresDB instance; // Наша переменная, которую мы инициализируем для хранения оригинального инстанса
+
     private String host;
     private String username;
     private String password;
@@ -12,12 +16,16 @@ public class PostgresDB implements IDB {
 
     private Connection connection;
 
-    public PostgresDB(String host, String username, String password, String dbName) {
-        setHost(host);
-        setUsername(username);
-        setPassword(password);
-        setDbName(dbName);
-    }
+    private PostgresDB() {
+    } // конструктор, ненужен по идее
+
+    public static PostgresDB getInstance() {
+        if (instance == null) {
+            instance = new PostgresDB();
+        }
+        return instance;
+    } // нужно для синглтона, если инстанс у нас хоть чему-то равен, а он равен чему-то всегда, мы возвращаем именно
+    // оригинальный инстанс который мы инициализировалли в начале
 
     @Override
     public Connection getConnection() {

@@ -2,11 +2,8 @@ package com.company;
 
 import com.company.controllers.interfaces.IUserController;
 import com.company.controllers.interfaces.IPropertyController;
-import java.util.regex.Pattern;
-import com.company.models.User; // Не забудь импорт, если будешь его использовать
 
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class MyApplication {
