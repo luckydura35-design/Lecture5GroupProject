@@ -6,7 +6,7 @@ import com.company.data.interfaces.IDB;
 import java.sql.*;
 
 public class PostgresDB implements IDB {
-
+// PastgreDB bd = new PostgreDB()
     private static PostgresDB instance; // Наша переменная, которую мы инициализируем для хранения оригинального инстанса
 
     private String host;

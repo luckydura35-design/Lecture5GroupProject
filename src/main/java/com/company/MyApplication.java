@@ -93,7 +93,9 @@ public class MyApplication {
         while (true) {
             System.out.print("Phone: ");
             phone = scanner.next();
-            boolean isAllDigits = phone.replace("+", "").chars().allMatch(Character::isDigit);
+            boolean isAllDigits = phone.replace("+","")
+                    .chars()
+                    .allMatch(ch -> Character.isDigit(ch));
             int len = phone.length();
 
             if (isAllDigits && len >= 10 && len <= 13) break;
