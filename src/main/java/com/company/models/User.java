@@ -8,6 +8,7 @@ public class User {
     private String password;
     private String first_name;
     private String last_name;
+    private boolean active;
 
     public User() {
     }
@@ -32,6 +33,18 @@ public class User {
         this.last_name = last_name;
     }
 
+    public User(int id, String username, String email, String phone, String password, String first_name, String last_name, boolean active) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.active = active;
+    }
+
+
     // геттеры и Сеттеры
     public int getId() {
         return id;
@@ -54,6 +67,7 @@ public class User {
     public String getLastName() {
         return last_name;
     }
+    public boolean is_active() {return active;}
 
 
 

@@ -9,4 +9,5 @@ public interface IUserRepository {
     int logIn(String un, String pw);
     List<User> getAllUsers();
     boolean updateUserField(int id, String column, String newValue);
+    User findUser(String columnName, String targetValue);
 }

@@ -107,4 +107,30 @@ public class UserRepository implements IUserRepository {
         }
 
     }
+
+    public User findUser(String columnName, String targetValue){
+        String sql = "SELECT * FROM users WHERE " + columnName + " = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)){
+
+            st.setString(1, targetValue);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("password"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getBoolean("is_active")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return null;
+
+    }
 }

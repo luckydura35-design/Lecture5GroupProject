@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.controllers.interfaces.IUserController;
 import com.company.controllers.interfaces.IPropertyController;
+import com.company.models.User;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -73,6 +74,7 @@ public class MyApplication {
                             case 1: showAllUsers(); break;
                             case 2: updateUserData(); break;
                             case 3: banUser(); break;
+                            case 4: findUser(); break;
                             case 0: return;
                             default: System.out.println("Invalid option!"); break;
                         }
@@ -243,7 +245,7 @@ public class MyApplication {
     }
 
     private void updateUserData() {
-        System.out.print("Enter User ID to modify: ");
+        System.out.print("Enter User ID to update: ");
         int targetUserId = scanner.nextInt();
 
         // TODO: Сделать проверку по айди, есть ли такой пользователь вообще
@@ -276,7 +278,7 @@ public class MyApplication {
         System.out.print("Enter new value for " + columnName + ": ");
         newValue = scanner.nextLine();
 
-        // Отправляем в контроллер
+        // отправляем в контроллер
         boolean success = userController.updateUserField(targetUserId, columnName, newValue);
 
         if (success) {
@@ -288,5 +290,33 @@ public class MyApplication {
 
     private boolean banUser(){
         return true;
+    }
+    private void findUser(){
+        System.out.println("\n--- Find user menu ---");
+        System.out.println("1. Find user by Username");
+        System.out.println("2. Find user by Email");
+        System.out.println("3. Find user by Phone");
+        System.out.println("4. Find user by Password");
+        System.out.println("0. Back");
+        System.out.print("Select: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        String columnName = "";
+        String targetValue = "";
+
+        switch (choice) {
+            case 1: columnName = "username"; break;
+            case 2: columnName = "email"; break;
+            case 3: columnName = "phone"; break;
+            case 4: columnName = "password"; break;
+        }
+
+        System.out.print("Enter target value for " + columnName + ": ");
+        targetValue = scanner.nextLine();
+
+        User user = userController.findUser(columnName, targetValue);
+
     }
 }

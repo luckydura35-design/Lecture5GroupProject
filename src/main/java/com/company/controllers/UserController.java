@@ -40,4 +40,8 @@ public class UserController implements IUserController {
     public boolean updateUserField(int userId, String columnName, String newValue){
         return repo.updateUserField(userId, columnName, newValue);
     }
+
+    public User findUser(String columnName, String targetValue){
+        return repo.findUser(columnName, targetValue);
+    }
 }
