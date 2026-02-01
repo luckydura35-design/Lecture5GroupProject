@@ -4,6 +4,7 @@ import com.company.controllers.interfaces.IPropertyController;
 import com.company.models.Property;
 import com.company.repositories.interfaces.IPropertyRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class PropertyController implements IPropertyController {
@@ -26,13 +27,12 @@ public class PropertyController implements IPropertyController {
         List<Property> properties = repo.getAllProperties();
         if (properties == null) return "Error happened!";
 
-        StringBuilder sb = new StringBuilder();
-        for (Property p : properties) {
-            sb.append(p.toString()).append("\n"); // Убедись, что в Property есть метод toString()
-        }
-        return sb.toString().isEmpty() ? "No properties found." : sb.toString();
-    }
+        String result = properties.stream()
+                .map(p ->p.toString())
+                .collect(Collectors.joining("\n"));
 
+        return result.isEmpty() ? "No properties found." : result;
+    }
     @Override
     public String createPropertyType(String name) {
         boolean created = repo.createPropertyType(name);

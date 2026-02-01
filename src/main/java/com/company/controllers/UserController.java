@@ -5,6 +5,7 @@ import com.company.controllers.interfaces.IUserController;
 import com.company.repositories.interfaces.IUserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserController implements IUserController {
     private final IUserRepository repo;
@@ -30,12 +31,9 @@ public class UserController implements IUserController {
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
 
-        StringBuilder response = new StringBuilder();
-        for (User user : users) {
-            response.append(user.toString()).append("\n");
-        }
-
-        return response.toString();
+        return users.stream() // Создаем поток из списка
+                .map(user -> user.toString()) // Лямбда: превращаем каждый объект User в строку
+                .collect(Collectors.joining("\n")); // Собираем все строки в одну с переносом \n
     }
     public boolean updateUserField(int userId, String columnName, String newValue){
         return repo.updateUserField(userId, columnName, newValue);
