@@ -1,5 +1,6 @@
 package com.company.controllers;
 
+import com.company.models.EntityFactory;
 import com.company.models.User;
 import com.company.controllers.interfaces.IUserController;
 import com.company.repositories.interfaces.IUserRepository;
@@ -16,7 +17,7 @@ public class UserController implements IUserController {
 
     @Override
     public boolean createUser(String username, String email, String phone, String password, String first_name, String last_name) {
-        User user = new User(username, email, phone, password, first_name, last_name);
+        User user = EntityFactory.createUser(username, email, phone, password, first_name, last_name);
 
         boolean created = repo.createUser(user);
 
@@ -32,8 +33,8 @@ public class UserController implements IUserController {
         List<User> users = repo.getAllUsers();
 
         return users.stream() // Создаем поток из списка
-                .map(user -> user.toString()) // Лямбда: превращаем каждый объект User в строку
-                .collect(Collectors.joining("\n")); // Собираем все строки в одну с переносом \n
+                .map(user -> user.toString())
+                .collect(Collectors.joining("\n"));
     }
     public boolean updateUserField(int userId, String columnName, String newValue){
         return repo.updateUserField(userId, columnName, newValue);

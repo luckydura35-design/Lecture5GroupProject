@@ -1,6 +1,7 @@
 package com.company.controllers;
 
 import com.company.controllers.interfaces.IPropertyController;
+import com.company.models.EntityFactory;
 import com.company.models.Property;
 import com.company.repositories.interfaces.IPropertyRepository;
 import java.util.List;
@@ -16,7 +17,7 @@ public class PropertyController implements IPropertyController {
 
     @Override
     public String createProperty(int ownerId, int typeId, int addressId, double areaSqm, int roomsCount, int floor, String description, String title) {
-        Property property = new Property(ownerId, typeId, addressId, areaSqm, roomsCount, floor, description, title);
+        Property property = EntityFactory.createProperty(ownerId, typeId, addressId, areaSqm, roomsCount, floor, description, title);
 
         boolean created = repo.createProperty(property);
 
