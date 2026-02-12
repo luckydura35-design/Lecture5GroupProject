@@ -27,9 +27,8 @@ public class PropertyController implements IPropertyController {
     public String getAllProperties() {
         List<Property> properties = repo.getAllProperties();
         if (properties == null) return "Error happened!";
-
         String result = properties.stream()
-                .map(p ->p.toString())
+                .map(Property::toString)
                 .collect(Collectors.joining("\n"));
 
         return result.isEmpty() ? "No properties found." : result;
@@ -48,11 +47,10 @@ public class PropertyController implements IPropertyController {
     public String getMyProperties(int ownerId) {
         List<Property> props = repo.getMyProperties(ownerId);
         if (props.isEmpty()) return "You don't own any properties.";
-        StringBuilder sb = new StringBuilder();
-        for (Property p : props) sb.append(p.toString()).append("\n");
-        return sb.toString();
+        return props.stream()
+                .map(Property::toString)
+                .collect(Collectors.joining("\n"));
     }
-
     @Override
     public String getAllListings() {
         return repo.getAllListings();
