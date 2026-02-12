@@ -96,11 +96,11 @@ public class UserRepository implements IUserRepository {
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)){
 
-                st.setString(1, newValue);
-                st.setInt(2, userId);
+            st.setString(1, newValue);
+            st.setInt(2, userId);
 
-                int rowsUpdated = st.executeUpdate();
-                return rowsUpdated > 0;
+            int rowsUpdated = st.executeUpdate();
+            return rowsUpdated > 0;
         }catch (SQLException e){
             System.out.println("SQL Error: " + e.getMessage());
             return false;
@@ -108,11 +108,10 @@ public class UserRepository implements IUserRepository {
 
     }
 
-    public User findUser(String columnName, String targetValue){
-        String sql = "SELECT * FROM users WHERE " + columnName + " = ?";
+    public User findUser(String columnName, String targetValue) {
+        String sql = "SELECT * FROM users WHERE " + columnName + "::text = ?";
         try (Connection con = db.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)){
-
+             PreparedStatement st = con.prepareStatement(sql)) {
             st.setString(1, targetValue);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -124,14 +123,14 @@ public class UserRepository implements IUserRepository {
                         rs.getString("password"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
-                        rs.getBoolean("is_active")
+                        rs.getBoolean("is_active"),
+                        rs.getString("role")
                 );
             }
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error in findUser: " + e.getMessage());
         }
         return null;
-
     }
     public boolean banUser(int targetUserId) {
         String deleteListingsSQL = "DELETE FROM listings WHERE property_id IN (SELECT id FROM properties WHERE owner_id = ?)";

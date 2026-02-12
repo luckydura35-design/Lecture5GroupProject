@@ -3,6 +3,7 @@ package com.company;
 import com.company.controllers.interfaces.IUserController;
 import com.company.controllers.interfaces.IPropertyController;
 import com.company.models.User;
+//import com.company.utils.ValidationUtils;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -49,7 +50,6 @@ public class MyApplication {
         System.out.println("0. Exit");
         System.out.print("Enter option: ");
     }
-
     public void start() {
         while (true) {
             if (!is_user_logged_in) {
@@ -131,11 +131,12 @@ public class MyApplication {
 
             System.out.println("Error: Invalid phone (10-12 digits required).");
         }
+
         String password;
         while (true) {
             System.out.print("Password: ");
             password = scanner.next();
-            if (password.length() >= 6) break;
+            if (password.length()>6) break;
             System.out.println("Error: Password must be at least 6 characters long.");
         }
         System.out.print("First Name: ");
@@ -145,7 +146,6 @@ public class MyApplication {
 
         try {
             boolean response = userController.createUser(username, email, phone, password, first_name, last_name);
-
             if (response) {
                 System.out.println("✅ Account has been created! Now you can log in.");
             } else {
@@ -163,12 +163,14 @@ public class MyApplication {
         System.out.print("Password: "); String password = scanner.next();
 
         int user_id = userController.logIn(username, password);
+        User user = userController.findUser("id", String.valueOf(user_id));
+        String role = user.getRole();
 
         if (user_id > -1) {
             System.out.println("You logged in! 👌");
             is_user_logged_in = true;
             currentUserId = user_id;
-            if (currentUserId == 777) {is_user_admin = true;}
+            if (role.equals("ADMIN")) {is_user_admin = true;}
         } else {
             System.out.println("Invalid username or password! 😥");
         }
@@ -247,7 +249,6 @@ public class MyApplication {
         System.out.println("\n--- Your Properties ---");
         System.out.println(propertyController.getMyProperties(currentUserId));
     }
-
     private void updateUserData() {
         System.out.print("Enter User ID to update: ");
         int targetUserId = scanner.nextInt();

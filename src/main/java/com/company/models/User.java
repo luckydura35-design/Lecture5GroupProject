@@ -9,6 +9,7 @@ public class User {
     private String first_name;
     private String last_name;
     private boolean active;
+    private String role;
 
     public User() {
     }
@@ -33,7 +34,7 @@ public class User {
         this.last_name = last_name;
     }
 
-    public User(int id, String username, String email, String phone, String password, String first_name, String last_name, boolean active) {
+    public User(int id, String username, String email, String phone, String password, String first_name, String last_name, boolean active, String role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -42,6 +43,7 @@ public class User {
         this.first_name = first_name;
         this.last_name = last_name;
         this.active = active;
+        this.role = role;
     }
 
 
@@ -67,8 +69,12 @@ public class User {
     public String getLastName() {
         return last_name;
     }
-    public boolean is_active() {return active;}
-
+    public boolean is_active() {
+        return active;
+    }
+    public String getRole() {
+        return role;
+    }
 
 
     @Override

@@ -5,6 +5,7 @@ import com.company.models.User;
 import com.company.controllers.interfaces.IUserController;
 import com.company.repositories.interfaces.IUserRepository;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,17 +33,20 @@ public class UserController implements IUserController {
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
 
-        return users.stream() // Создаем поток из списка
-                .map(user -> user.toString())
+        return users.stream()
+                .map(User::toString)
                 .collect(Collectors.joining("\n"));
     }
-    public boolean updateUserField(int userId, String columnName, String newValue){
+
+    public boolean updateUserField(int userId, String columnName, String newValue) {
         return repo.updateUserField(userId, columnName, newValue);
     }
 
-    public User findUser(String columnName, String targetValue){
+    public User findUser(String columnName, String targetValue) {
         return repo.findUser(columnName, targetValue);
     }
 
-    public boolean banUser(int targetUserId){return repo.banUser(targetUserId);}
+    public boolean banUser(int targetUserId) {
+        return repo.banUser(targetUserId);
+    }
 }
